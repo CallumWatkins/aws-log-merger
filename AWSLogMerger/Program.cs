@@ -13,6 +13,23 @@ namespace AWSLogMerger
 
         [Option('s', "source", Required = true, HelpText = "Set log file source directory.")]
         public string SourceDirectory { get; set; }
+
+        [Option('p', "period", Required = false, HelpText = "Set output period.")]
+        public Period OutputPeriod { get; set; }
+    }
+
+    /// <summary>
+    /// A period of time over which log files can be combined.
+    /// </summary>
+    internal enum Period
+    {
+                    // Example output group names (ISO 8601):
+        Hourly,     // 2020-06-02T19
+        Daily,      // 2020-06-02
+        Weekly,     // 2020-W23
+        Monthly,    // 2020-06
+        Yearly,     // 2020
+        All         // all
     }
 
     internal enum LogType
@@ -53,6 +70,11 @@ namespace AWSLogMerger
             if (error) Environment.Exit(1);
         }
 
+        private static IEnumerable<(string name, IEnumerable<string> lines)> Split(IEnumerable<(DateTime dateTime, string entry)> entries, IEnumerable<string> headers, Period period)
+        {
+            throw new NotImplementedException();
+        }
+
         private static void Run(Options options)
         {
             try
@@ -68,6 +90,7 @@ namespace AWSLogMerger
                 if (filePaths.Length == 0) throw new Exception("Source directory contains no files.");
 
                 IEnumerable<(DateTime dateTime, string entry)> entries = parser.Parse(filePaths);
+                IEnumerable<(string name, IEnumerable<string> lines)> outputGroups = Split(entries, new[] { "#Test Header" }, options.OutputPeriod);
             }
             catch (Exception e)
             {
