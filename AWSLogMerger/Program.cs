@@ -91,7 +91,7 @@ namespace AWSLogMerger
                     LogType.CloudFront => new CloudFrontLogReader(),
                     _ => throw new ArgumentOutOfRangeException(nameof(options.Type), "Unrecognised log file type."),
                 };
-                LogWriter writer = new ConsoleLogWriter(options.OutputDirectory);
+                LogWriter writer = new FileLogWriter(options.OutputDirectory, false, options.GZip);
                 LogMerger logMerger = new LogMerger(reader, writer);
 
                 logMerger.Merge(options.SourceDirectory, options.OutputPeriod);

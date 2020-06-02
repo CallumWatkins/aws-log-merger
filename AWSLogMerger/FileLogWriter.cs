@@ -9,7 +9,7 @@ namespace AWSLogMerger
         private readonly bool _overwrite;
         private readonly bool _gzip;
 
-        public FileLogWriter(string basePath, bool overwrite) : base(basePath)
+        public FileLogWriter(string basePath, bool overwrite, bool gzip) : base(basePath)
         {
             _overwrite = overwrite;
             _gzip = gzip;
