@@ -67,7 +67,7 @@ namespace AWSLogMerger
                 string[] filePaths = Directory.GetFiles(options.SourceDirectory);
                 if (filePaths.Length == 0) throw new Exception("Source directory contains no files.");
 
-                IEnumerable<string> result = parser.Parse(filePaths);
+                IEnumerable<(DateTime dateTime, string entry)> entries = parser.Parse(filePaths);
             }
             catch (Exception e)
             {

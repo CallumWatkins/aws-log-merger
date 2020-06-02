@@ -11,7 +11,7 @@ namespace AWSLogMerger
     /// Can parse CloudFront Web/RTMP Distribution log files.
     /// <see cref="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html#LogFileFormat"/>
     /// </summary>
-    internal class CloudFrontLogParser : TemporalLogParser
+    internal class CloudFrontLogParser : LogParser
     {
         protected override ILogFileReader GetLogFileReader(string path)
         {
