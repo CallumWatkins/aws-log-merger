@@ -25,7 +25,7 @@ namespace AWSLogMerger
     {
         private static void Main(string[] args)
         {
-            ParserResult<Options> parserResult = Parser.Default.ParseArguments<Options>(args);
+            ParserResult<Options> parserResult = new Parser(with => with.HelpWriter = null).ParseArguments<Options>(args);
 
             parserResult
                 .WithParsed(CheckOptions)
