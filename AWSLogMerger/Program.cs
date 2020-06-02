@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using CommandLine;
 using CommandLine.Text;
 
@@ -62,7 +64,10 @@ namespace AWSLogMerger
                     _ => throw new ArgumentOutOfRangeException(nameof(options.Type), "Unrecognised log file type.")
                 };
 
-                IEnumerable<string> result = parser.Parse(Directory.GetFiles(options.SourceDirectory));
+                string[] filePaths = Directory.GetFiles(options.SourceDirectory);
+                if (filePaths.Length == 0) throw new Exception("Source directory contains no files.");
+
+                IEnumerable<string> result = parser.Parse(filePaths);
             }
             catch (Exception e)
             {

@@ -5,11 +5,11 @@ namespace AWSLogMerger
 {
     internal abstract class LogParser
     {
-        public abstract IEnumerable<string> Parse(ICollection<string> fileNames);
+        public abstract IEnumerable<string> Parse(ICollection<string> paths);
 
-        protected abstract IEntryEnumerator GetEntryEnumerator(string file);
+        protected abstract ILogFileReader GetLogFileReader(string path);
 
-        protected interface IEntryEnumerator : IEnumerable<string>, IDisposable
+        protected interface ILogFileReader : IEnumerable<string>, IDisposable
         {
         }
     }

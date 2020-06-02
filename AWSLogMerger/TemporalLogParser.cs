@@ -9,15 +9,13 @@ namespace AWSLogMerger
 {
     internal abstract class TemporalLogParser : LogParser
     {
-        public override IEnumerable<string> Parse(ICollection<string> fileNames)
+        public override IEnumerable<string> Parse(ICollection<string> paths)
         {
-            if (fileNames.Count == 0) throw new ParseException("Source directory contains no files.");
-
             var lines = new ConcurrentBag<(DateTime dateTime, string entry)>();
 
-            Parallel.ForEach(fileNames, file =>
+            Parallel.ForEach(paths, path =>
             {
-                using IEntryEnumerator entryEnumerator = GetEntryEnumerator(file);
+                using ILogFileReader entryEnumerator = GetLogFileReader(path);
                 foreach (string entry in entryEnumerator)
                     lines.Add((ExtractDateTime(entry), entry));
             });
