@@ -16,7 +16,7 @@ namespace AWSLogMerger
         [Option('s', "source", Required = true, HelpText = "Set log file source directory.")]
         public string SourceDirectory { get; set; }
 
-        [Option('p', "period", Required = false, HelpText = "Set output period.")]
+        [Option('p', "period", Required = true, HelpText = "Set output period.")]
         public Period OutputPeriod { get; set; }
     }
 
