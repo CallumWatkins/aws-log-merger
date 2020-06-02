@@ -8,10 +8,10 @@ using System.IO.Compression;
 namespace AWSLogMerger
 {
     /// <summary>
-    /// Can parse CloudFront Web/RTMP Distribution log files.
+    /// Can read CloudFront Web/RTMP Distribution log files.
     /// <see cref="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html#LogFileFormat"/>
     /// </summary>
-    internal class CloudFrontLogParser : LogParser
+    internal class CloudFrontLogReader : LogReader
     {
         protected override ILogFileReader GetLogFileReader(string path)
         {
@@ -37,7 +37,7 @@ namespace AWSLogMerger
                 if (Path.GetExtension(path) == ".gz")
                 {
                     // Decompress .gz file
-                    reader = new GZipStream(reader, CompressionMode.Decompress, true);
+                    reader = new GZipStream(reader, CompressionMode.Decompress);
                 }
                 _sr = new StreamReader(reader);
             }

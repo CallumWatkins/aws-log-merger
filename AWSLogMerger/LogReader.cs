@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AWSLogMerger
 {
-    internal abstract class LogParser
+    internal abstract class LogReader
     {
-        public IEnumerable<(DateTime dateTime, string entry)> Parse(ICollection<string> paths)
+        public IEnumerable<(DateTime dateTime, string entry)> Read(ICollection<string> paths)
         {
             var lines = new ConcurrentBag<(DateTime dateTime, string entry)>();
 
