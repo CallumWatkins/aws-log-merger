@@ -53,7 +53,22 @@ namespace AWSLogMerger
 
         private static void Run(Options options)
         {
+            try
+            {
+                LogParser parser = options.Type switch
+                {
+                    LogType.S3 => new S3LogParser(),
+                    LogType.CloudFront => new CloudFrontLogParser(),
+                    _ => throw new ArgumentOutOfRangeException(nameof(options.Type), "Unrecognised log file type.")
+                };
 
+                IEnumerable<string> result = parser.Parse(Directory.GetFiles(options.SourceDirectory));
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e.Message);
+                Environment.Exit(2);
+            }
         }
     }
 }
