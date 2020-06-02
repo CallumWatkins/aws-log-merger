@@ -18,6 +18,9 @@ namespace AWSLogMerger
 
         [Option('o', "output", Required = true, HelpText = "Set combined destination directory.")]
         public string OutputDirectory { get; set; }
+
+        [Option('g', "gzip", Default = false, Required = false, HelpText = "GZip before writing output.")]
+        public bool GZip { get; set; }
     }
 
     /// <summary>
