@@ -21,7 +21,7 @@ namespace AWSLogMerger
         protected override DateTime ExtractDateTime(string entry)
         {
             ReadOnlySpan<char> dateTime = entry.AsSpan().Slice(0, 19);
-            if (DateTime.TryParseExact(dateTime, "yyyy-MM-dd\tHH:mm:ss", null, DateTimeStyles.AssumeUniversal, out DateTime result))
+            if (DateTime.TryParseExact(dateTime, "yyyy-MM-dd\tHH:mm:ss", null, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out DateTime result))
                 return result;
             else
                 throw new ParseException($"Unable to find time in log entry: '{entry}'.");
