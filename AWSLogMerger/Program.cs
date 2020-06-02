@@ -18,6 +18,9 @@ namespace AWSLogMerger
 
         [Option('p', "period", Required = true, HelpText = "Set output period.")]
         public Period OutputPeriod { get; set; }
+
+        [Option('o', "output", Required = true, HelpText = "Set combined destination directory.")]
+        public string OutputDirectory { get; set; }
     }
 
     /// <summary>
@@ -71,6 +74,11 @@ namespace AWSLogMerger
 
             if (error) Environment.Exit(1);
         }
+            if (!Directory.Exists(options.OutputDirectory))
+            {
+                Console.Error.WriteLine("Output directory does not exist.");
+                error = true;
+            }
 
         /// <summary>
         /// Group log file entries into distinct groups based on their timestamp and the size of the period.
