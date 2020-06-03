@@ -24,6 +24,9 @@ namespace AWSLogMerger
 
         [Option('h', "headers", HelpText = "Prepend headers found on input logs to all output logs.")]
         public bool AddHeaders { get; set; }
+
+        [Option('v', "overwrite", HelpText = "Overwrite existing files when outputting logs.")]
+        public bool OverwriteExistingFiles { get; set; }
     }
 
     /// <summary>
@@ -94,7 +97,7 @@ namespace AWSLogMerger
                     LogType.CloudFront => new CloudFrontLogReader(),
                     _ => throw new ArgumentOutOfRangeException(nameof(options.Type), "Unrecognised log file type."),
                 };
-                LogWriter writer = new FileLogWriter(options.OutputDirectory, false, options.GZip);
+                LogWriter writer = new FileLogWriter(options.OutputDirectory, options.OverwriteExistingFiles, options.GZip);
                 LogMerger logMerger = new LogMerger(reader, writer, options.AddHeaders);
 
                 logMerger.Merge(options.SourceDirectory, options.OutputPeriod);
