@@ -28,9 +28,8 @@ namespace AWSLogMerger
             string[] filePaths = Directory.GetFiles(sourceDirectory);
             if (filePaths.Length == 0) throw new Exception("Source directory contains no files.");
 
-            IEnumerable<(DateTime dateTime, string entry)> entries = _reader.Read(filePaths);
+            IEnumerable<(DateTime dateTime, string entry)> entries = _reader.Read(filePaths, out ICollection<string> headers);
             IEnumerable<IGrouping<string, string>> outputGroups = GroupByPeriod(entries, period);
-            IEnumerable<string> headers = Enumerable.Empty<string>();
             WriteOutput(outputGroups, headers);
         }
 

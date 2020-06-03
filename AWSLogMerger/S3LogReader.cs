@@ -40,23 +40,33 @@ namespace AWSLogMerger
 
         private sealed class S3LogFileReader : ILogFileReader
         {
-            private readonly StreamReader _sr;
+            private readonly string _path;
 
-            public S3LogFileReader(string file)
+            public S3LogFileReader(string path)
             {
-                FileStream reader = File.OpenRead(file);
-                _sr = new StreamReader(reader);
+                _path = path;
             }
 
-            public IEnumerator<string> GetEnumerator()
+            private StreamReader OpenRead()
             {
-                while (!_sr.EndOfStream)
-                    yield return _sr.ReadLine();
+
+                Stream reader = File.OpenRead(_path);
+                return new StreamReader(reader);
             }
 
-            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+            public IEnumerable<string> GetHeaders()
+            {
+                // No headers
+                yield break;
+            }
 
-            public void Dispose() => _sr.Dispose();
+            public IEnumerable<string> GetEntries()
+            {
+                using StreamReader sr = OpenRead();
+
+                while (!sr.EndOfStream)
+                    yield return sr.ReadLine();
+            }
         }
     }
 }

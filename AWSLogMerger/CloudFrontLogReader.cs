@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -29,32 +28,49 @@ namespace AWSLogMerger
 
         private sealed class CloudFrontLogFileReader : ILogFileReader
         {
-            private readonly StreamReader _sr;
+            private readonly string _path;
 
             public CloudFrontLogFileReader(string path)
             {
-                Stream reader = File.OpenRead(path);
-                if (Path.GetExtension(path) == ".gz")
+                _path = path;
+            }
+
+            private StreamReader OpenRead() {
+
+                Stream reader = File.OpenRead(_path);
+                if (Path.GetExtension(_path) == ".gz")
                 {
                     // Decompress .gz file
                     reader = new GZipStream(reader, CompressionMode.Decompress);
                 }
-                _sr = new StreamReader(reader);
+                return new StreamReader(reader);
             }
 
-            public IEnumerator<string> GetEnumerator()
+            public IEnumerable<string> GetHeaders()
             {
-                // Skip first two lines (file format version and W3C fields)
-                _sr.ReadLine();
-                _sr.ReadLine();
+                using StreamReader sr = OpenRead();
 
-                while (!_sr.EndOfStream)
-                    yield return _sr.ReadLine();
+                while (!sr.EndOfStream)
+                {
+                    string line = sr.ReadLine();
+                    if (line.StartsWith('#')) yield return line;
+                    else yield break;
+                }
             }
 
-            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+            public IEnumerable<string> GetEntries()
+            {
+                using StreamReader sr = OpenRead();
 
-            public void Dispose() => _sr.Dispose();
+                while (!sr.EndOfStream)
+                {
+                    string line = sr.ReadLine();
+                    // Skip any line starting with #
+                    if (line.StartsWith('#')) continue;
+
+                    yield return line;
+                }
+            }
         }
     }
 }
