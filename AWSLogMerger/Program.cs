@@ -19,8 +19,11 @@ namespace AWSLogMerger
         [Option('o', "output", Required = true, HelpText = "Set combined destination directory.")]
         public string OutputDirectory { get; set; }
 
-        [Option('g', "gzip", Default = false, Required = false, HelpText = "GZip before writing output.")]
+        [Option('g', "gzip", HelpText = "GZip before writing output logs.")]
         public bool GZip { get; set; }
+
+        [Option('h', "headers", HelpText = "Prepend headers found on input logs to all output logs.")]
+        public bool AddHeaders { get; set; }
     }
 
     /// <summary>
@@ -92,7 +95,7 @@ namespace AWSLogMerger
                     _ => throw new ArgumentOutOfRangeException(nameof(options.Type), "Unrecognised log file type."),
                 };
                 LogWriter writer = new FileLogWriter(options.OutputDirectory, false, options.GZip);
-                LogMerger logMerger = new LogMerger(reader, writer);
+                LogMerger logMerger = new LogMerger(reader, writer, options.AddHeaders);
 
                 logMerger.Merge(options.SourceDirectory, options.OutputPeriod);
             }

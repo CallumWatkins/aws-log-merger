@@ -14,16 +14,18 @@ namespace AWSLogMerger
     {
         private readonly LogReader _reader;
         private readonly LogWriter _writer;
+        private readonly bool _addHeaders;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LogMerger"/> class with the given reader and writer strategies.
         /// </summary>
         /// <param name="reader">The log reader strategy.</param>
         /// <param name="writer">The log writer strategy.</param>
-        public LogMerger(LogReader reader, LogWriter writer)
+        public LogMerger(LogReader reader, LogWriter writer, bool addHeaders)
         {
             _reader = reader;
             _writer = writer;
+            _addHeaders = addHeaders;
         }
 
         /// <summary>
@@ -38,6 +40,8 @@ namespace AWSLogMerger
 
             IEnumerable<(DateTime dateTime, string entry)> entries = _reader.Read(filePaths, out ICollection<string> headers);
             IEnumerable<IGrouping<string, string>> outputGroups = GroupByPeriod(entries, period);
+
+            if (!_addHeaders) headers = new string[0];
             WriteOutput(outputGroups, headers);
         }
 
