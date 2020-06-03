@@ -4,6 +4,9 @@ using System.IO;
 
 namespace AWSLogMerger
 {
+    /// <summary>
+    /// Supports writing output logs to the console.
+    /// </summary>
     internal sealed class ConsoleLogWriter : LogWriter
     {
         public ConsoleLogWriter(string namePrefix) : base(namePrefix)

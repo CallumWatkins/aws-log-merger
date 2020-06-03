@@ -7,11 +7,19 @@ using System.Threading.Tasks;
 
 namespace AWSLogMerger
 {
+    /// <summary>
+    /// Given concrete reader and writer strategies, can merge log files together and output in groups.
+    /// </summary>
     internal sealed class LogMerger
     {
         private readonly LogReader _reader;
         private readonly LogWriter _writer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogMerger"/> class with the given reader and writer strategies.
+        /// </summary>
+        /// <param name="reader">The log reader strategy.</param>
+        /// <param name="writer">The log writer strategy.</param>
         public LogMerger(LogReader reader, LogWriter writer)
         {
             _reader = reader;

@@ -6,6 +6,10 @@ using System.IO;
 
 namespace AWSLogMerger
 {
+    /// <summary>
+    /// Can read S3 server access log files.
+    /// <see cref="https://docs.aws.amazon.com/AmazonS3/latest/dev/LogFormat.html"/>
+    /// </summary>
     internal class S3LogReader : LogReader
     {
         protected override ILogFileReader GetLogFileReader(string file)

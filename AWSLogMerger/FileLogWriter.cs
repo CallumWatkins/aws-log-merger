@@ -4,6 +4,9 @@ using System.IO.Compression;
 
 namespace AWSLogMerger
 {
+    /// <summary>
+    /// Supports writing output logs to files.
+    /// </summary>
     internal sealed class FileLogWriter : LogWriter
     {
         private readonly bool _overwrite;
