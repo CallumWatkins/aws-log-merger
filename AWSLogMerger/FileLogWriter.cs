@@ -25,9 +25,10 @@ namespace AWSLogMerger
             string path = Path.Combine(NamePrefix, name);
             if (_gzip) path += ".gz";
 
-            if (!_overwrite && File.Exists(path)) throw new IOException($"File already exists: '{path}'");
+            Stream file = _overwrite
+                ? File.Open(path, FileMode.Create, FileAccess.Write)
+                : File.Open(path, FileMode.CreateNew, FileAccess.Write);
 
-            Stream file = File.OpenWrite(path);
             if (_gzip) file = new GZipStream(file, CompressionLevel.Optimal);
             using var sw = new StreamWriter(file);
 
